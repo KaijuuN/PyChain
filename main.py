@@ -1,3 +1,4 @@
+import random
 from miner import Miner
 from transactionpool import TransactionPool
 from transactions import Transaction
@@ -10,47 +11,42 @@ def main():
     blockchain = Blockchain()
     transaction_pool = TransactionPool()
     miner = Miner(blockchain, transaction_pool)
+    wallets=[Wallet(blockchain, f"wallet_{i}") for i in range(1,251)]    # Generiert eine Liste mit wallets
+    miner_wallet = Wallet(blockchain, "Miner69er")  # miner wallet
 
-    # Wallets erstellen
-    alice_wallet = Wallet(blockchain, "Alice")
-    bob_wallet = Wallet(blockchain, "Bob")
-    miner_wallet = Wallet(blockchain, "Miner69er")
+    # Definiere die maximale Anzahl von Transaktionen pro Block
+    MAX_TRANSACTIONS_PER_BLOCK = 3
 
-   # Erstelle Transaktionen und füge sie dem Pool hinzu
-    Transaction.credit_wallet(alice_wallet, 100, transaction_pool, blockchain)
-    Transaction.credit_wallet(bob_wallet, 100, transaction_pool, blockchain)
+    # Befüllt die wallets mit "Startguthaben"
+    for wallet in wallets:
+        Transaction.credit_wallet(wallet,500,transaction_pool,blockchain)
 
-    # Führe den Mining-Prozess durch
+    # Führe den Mining-Prozess durch, um die Guthaben zu aktivieren
     miner.mine(miner_wallet)
+    
 
-    # Kontostände abfragen
-    print(f"[DEBUG] Balance von Alice: {alice_wallet.get_balance(blockchain)}")
-    print(f"[DEBUG] Balance von Bob: {bob_wallet.get_balance(blockchain)}")
-    print(f"[DEBUG] Balance von Miner69er: {
-          miner_wallet.get_balance(blockchain)}")
 
-    # Beispiel-Transaktionen hinzufügen
-    transaction_pool.add_transaction(Transaction(
-        alice_wallet, bob_wallet, 50), blockchain)
-    transaction_pool.add_transaction(Transaction(
-        bob_wallet, alice_wallet, 25), blockchain)
+    # Generiert "Random" Transactionen zwischen den wallets
+    for i in range(0, len(wallets),2):
+        transaction_pool.add_transaction(Transaction(wallets[i], wallets[i+1], round(random.uniform(20.0, 138.0),2)), blockchain)
+
+        # Wenn die Anzahl der ausstehenden Transaktionen die Grenze erreicht, mine einen Block
+        if len(transaction_pool.pending_transactions) >= MAX_TRANSACTIONS_PER_BLOCK:
+            miner.mine(miner_wallet)
 
     # Mine die ausstehenden Transaktionen (belohne den Miner)
-    miner.mine(miner_wallet)
+    # miner.mine(miner_wallet)
 
     # Zeige Informationen über die Blockchain an
     print("\nBlockchain:")
     for block in blockchain.chain:
-        print(
-            f"Block {block.index} - Hash: {block.hash} - Previous Hash: {block.prev_hash}")
-        print(f"Transactions: {[tx.__dict__ for tx in block.transactions]}")
+        print(f"Block {block.index} - Hash: {block.hash} - Previous Hash: {block.prev_hash}")
+        print(f"Transactions: {[tx.to_dict() for tx in block.transactions]}")
         print(f"Merkle Root: {block.merkle_root}")
         print("\n")
 
-    # Kontostände abfragen
-    print(f"Balance von Alice: {alice_wallet.get_balance(blockchain)}")
-    print(f"Balance von Bob: {bob_wallet.get_balance(blockchain)}")
-    print(f"Balance von Miner69er: {miner_wallet.get_balance(blockchain)}")
+
+    print(f"[DEBUG] Balance von Miner69er: {miner_wallet.get_balance(blockchain)}")
 
     # Überprüfe die Gültigkeit der Blockchain
     if blockchain.is_chain_valid():

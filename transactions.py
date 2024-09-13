@@ -23,8 +23,7 @@ class Transaction:
         """Erstellt eine System-Transaktion und fügt sie dem Pool hinzu."""
         system_transaction = Transaction(None, receiver_wallet, amount)
         transaction_pool.add_transaction(system_transaction, blockchain)
-        print(f"{amount} wurde dem Wallet {
-              receiver_wallet.address} gutgeschrieben.")
+        # print(f"[DEBUG] {amount} wurde dem Wallet {receiver_wallet.address} gutgeschrieben.")
 
     def __repr__(self):
         return f"Transaction(from: {self.sender}, to: {self.receiver}, amount: {self.amount})"

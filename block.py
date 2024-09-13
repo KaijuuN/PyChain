@@ -9,9 +9,9 @@ class Block:
         self.timestamp = time.time()
         self.transactions = transactions
         self.prev_hash = prev_hash
-        self.nonce = 0
-        self.merkle_root = self.calculate_merkle_root()
-        self.hash = self.calculate_hash()
+        self.nonce = 0  # Nonce wird während des Minings gesetzt
+        self._merkle_root = self.calculate_merkle_root()
+        self.hash = None  # Der Hash wird während des Minings berechnet
 
     def calculate_hash(self) -> str:
         transactions_str = json.dumps(
@@ -20,7 +20,15 @@ class Block:
             self.prev_hash}{self.nonce}{self.merkle_root}"
         return hashlib.sha256(block_str.encode()).hexdigest()
 
+    @property
+    def merkle_root(self) -> str:
+        # Überprüfe, ob die Merkle-Root schon berechnet wurde
+        if self._merkle_root is None:
+            self._merkle_root = self.calculate_merkle_root()
+        return self._merkle_root
+
     # Berechne die Merkle-Root der Transaktionen
+
     def calculate_merkle_root(self) -> str:
         # Hilfsfunktion, um einen String zu hashen
         def hash_string(s: str) -> str:
