@@ -1,13 +1,22 @@
-# Beispiel für Transaktionen (Dummy-Klasse)
+from wallet import Wallet
+
+
 class Transaction:
-    def __init__(self, sender: str, receiver: str, amount: float):
-        self.sender = sender
-        self.receiver = receiver
+    def __init__(self, sender: Wallet, receiver: Wallet, amount: float):
+        self.sender_wallet = sender  # Speichere das Wallet-Objekt des Senders
+        self.receiver_wallet = receiver  # Speichere das Wallet-Objekt des Empfängers
         self.amount = amount
+        # Speichere die Adressen der Wallets zur Serialisierung und Anzeige
+        self.sender = sender.address if sender is not None else "System"
+        self.receiver = receiver.address
 
+    def to_dict(self):
+        """Konvertiert die Transaktion in ein Dictionary (für das Speichern oder Anzeigen)."""
+        return {
+            "sender": self.sender,
+            "receiver": self.receiver,
+            "amount": self.amount
+        }
 
-# Beispielnutzung
-tx1 = Transaction("Alice", "Bob", 50)
-tx2 = Transaction("Bob", "Charlie", 25)
-tx3 = Transaction("Charlie", "Dave", 10)
-tx4 = Transaction("Dave", "Alice", 5)
+    def __repr__(self):
+        return f"Transaction(from: {self.sender}, to: {self.receiver}, amount: {self.amount})"
