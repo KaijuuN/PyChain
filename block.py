@@ -15,7 +15,7 @@ class Block:
 
     def calculate_hash(self) -> str:
         transactions_str = json.dumps(
-            [tx.__dict__ for tx in self.transactions], sort_keys=True)
+            [tx.to_dict() for tx in self.transactions], sort_keys=True)
         block_str = f"{self.index}{self.timestamp}{transactions_str}{
             self.prev_hash}{self.nonce}{self.merkle_root}"
         return hashlib.sha256(block_str.encode()).hexdigest()
@@ -36,13 +36,11 @@ class Block:
 
         # Wenn nur eine Transaktion vorhanden ist, wird der Hash der Transaktion zurückgegeben
         if len(self.transactions) == 1:
-            transaction_str = json.dumps(
-                self.transactions[0].__dict__, sort_keys=True)
-            return hash_string(transaction_str)
+            return hashlib.sha256(json.dumps(self.transactions[0].to_dict(), sort_keys=True).encode()).hexdigest()
 
         # Schritt 1: Transaktionen hashen
         transaction_hashes = [hash_string(json.dumps(
-            tx.__dict__, sort_keys=True)) for tx in self.transactions]
+            tx.to_dict(), sort_keys=True)) for tx in self.transactions]
 
         # Schritt 2: Paare bilden und hashen, bis nur ein Hash übrig ist
         while len(transaction_hashes) > 1:

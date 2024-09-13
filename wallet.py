@@ -1,5 +1,3 @@
-
-
 class Wallet:
     def __init__(self, blockchain, address: str):
         self.blockchain = blockchain  # Verweis auf die Blockchain
@@ -24,4 +22,4 @@ class Wallet:
         return self.get_balance(blockchain) >= amount
 
     def __repr__(self):
-        return f"Wallet({self.address}): {self.get_balance()}"
+        return f"Wallet({self.address}): {self.get_balance(self.blockchain)}"

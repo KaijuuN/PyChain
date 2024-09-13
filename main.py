@@ -16,8 +16,20 @@ def main():
     bob_wallet = Wallet(blockchain, "Bob")
     miner_wallet = Wallet(blockchain, "Miner69er")
 
+   # Erstelle Transaktionen und füge sie dem Pool hinzu
+    Transaction.credit_wallet(alice_wallet, 100, transaction_pool, blockchain)
+    Transaction.credit_wallet(bob_wallet, 100, transaction_pool, blockchain)
+
+    # Führe den Mining-Prozess durch
+    miner.mine(miner_wallet)
+
+    # Kontostände abfragen
+    print(f"[DEBUG] Balance von Alice: {alice_wallet.get_balance(blockchain)}")
+    print(f"[DEBUG] Balance von Bob: {bob_wallet.get_balance(blockchain)}")
+    print(f"[DEBUG] Balance von Miner69er: {
+          miner_wallet.get_balance(blockchain)}")
+
     # Beispiel-Transaktionen hinzufügen
-    # transaction_pool.add_transaction(alice_wallet, bob_wallet, 50, blockchain)
     transaction_pool.add_transaction(Transaction(
         alice_wallet, bob_wallet, 50), blockchain)
     transaction_pool.add_transaction(Transaction(
@@ -36,9 +48,9 @@ def main():
         print("\n")
 
     # Kontostände abfragen
-    print(f"Balance von Alice: {alice_wallet.get_balance()}")
-    print(f"Balance von Bob: {bob_wallet.get_balance()}")
-    print(f"Balance von Miner69er: {miner_wallet.get_balance()}")
+    print(f"Balance von Alice: {alice_wallet.get_balance(blockchain)}")
+    print(f"Balance von Bob: {bob_wallet.get_balance(blockchain)}")
+    print(f"Balance von Miner69er: {miner_wallet.get_balance(blockchain)}")
 
     # Überprüfe die Gültigkeit der Blockchain
     if blockchain.is_chain_valid():
