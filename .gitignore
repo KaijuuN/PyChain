@@ -5,6 +5,7 @@ __pycache__/
 
 # files
 alle_scripte.txt
+roadmap.txt
 
 # C extensions
 *.so
