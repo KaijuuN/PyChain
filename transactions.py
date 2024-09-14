@@ -1,4 +1,4 @@
-from wallet import Wallet
+from wallet import Wallet, MultiSigWallet
 
 
 class Transaction:
@@ -27,3 +27,11 @@ class Transaction:
 
     def __repr__(self):
         return f"Transaction(from: {self.sender}, to: {self.receiver}, amount: {self.amount})"
+
+class MultiSigTransaction(Transaction):
+    def __init__(self, sender_wallet, receiver_wallet, amount, signatures: list):
+        super().__init__(sender_wallet, receiver_wallet, amount)
+        self.signatures = signatures
+
+    def is_valid(self, multisig_wallet: MultiSigWallet) -> bool:
+        return multisig_wallet.verify_signatures(self.signatures)
