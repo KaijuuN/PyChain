@@ -67,3 +67,15 @@ class Block:
 
         # Der letzte verbliebene Hash ist die Merkle-Root
         return transaction_hashes[0]
+
+    def to_dict(self):
+        """Konvertiert den Block in ein Dictionary, um ihn serialisierbar zu machen."""
+        return {
+            'index': self.index,
+            'timestamp': self.timestamp,
+            'transactions': [tx.to_dict() for tx in self.transactions],
+            'prev_hash': self.prev_hash,
+            'nonce': self.nonce,
+            'merkle_root': self.merkle_root,
+            'hash': self.hash
+        }

@@ -1,4 +1,3 @@
-import time
 from block import Block
 from blockchain import Blockchain
 from transactionpool import TransactionPool
