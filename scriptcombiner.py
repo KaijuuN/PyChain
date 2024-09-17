@@ -13,6 +13,6 @@ def combine_scripts_to_file(script_names, output_file):
                 print(f"Die Datei {filename} wurde nicht gefunden.")
 
 # Beispielhafte Verwendung
-script_names = ['main.py', 'block.py', 'blockchain.py','transactions.py','transactionpool.py', 'wallet.py', 'app.py']  # Manuelle Liste der Dateien
+script_names = ['main.py', 'block.py', 'blockchain.py','transactions.py','transactionpool.py', 'wallet.py', 'app.py', 'miner.py']  # Manuelle Liste der Dateien
 output_file_path = 'alle_scripte.txt'
 combine_scripts_to_file(script_names, output_file_path)
